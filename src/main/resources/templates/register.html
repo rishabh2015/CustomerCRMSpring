@@ -7,44 +7,60 @@
 <body>
 
 <h2>Register</h2>
-<form th:action="@{/register}" th:object="${user}" method="post">
+<form id="register-form" onSubmit="return false;" >
     <div>
-        <input type="hidden" th:field="*{id}" />
+        <input type="hidden" name="id" id="user_id" />
     </div>
     <div>
         <label>
             Username:
-            <input type="text" th:field="*{username}"/>
+            <input type="text" name="username" id="user_name"/>
         </label>
     </div>
     <div>
         <label>
             Email:
-            <input type="email" th:field="*{email}"/>
+            <input type="email" name="email" id="user_email"/>
         </label>
     </div>
     <div>
         <label>
             Password:
-            <input type="password" th:field="*{password}"/>
+            <input type="password" name="password" id="user_password"/>
         </label>
     </div>
     <div>
         <label>
             First Name:
-            <input type="text" th:field="*{firstName}"/>
+            <input type="text" name="firstname" id="user_fname"/>
         </label>
     </div>
     <div>
         <label>
             Last Name:
-            <input type="text" th:field="*{lastName}"/>
+            <input type="text" name="lastname" id="user_lname"/>
         </label>
     </div>
     <div>
-        <input type="submit" value="Register"/>
+        <input type="submit" onClick="submitForm()" value="Register" />
     </div>
 </form>
-
+<script type="text/javascript">
+    function submitForm(event){
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/crm/registerUser', true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        var j = {
+        		"id":1000,
+        		"username":document.getElementById("user_name").value,
+        		"email":document.getElementById("user_email").value,
+        		"password": document.getElementById("user_password").value,
+        		"firstName":document.getElementById("user_fname").value,
+        		"lastName":document.getElementById("user_lname").value
+        }
+        console.log("json being formed", j);
+        xhr.send(JSON.stringify(j));
+      }
+ </script>
 </body>
 </html>

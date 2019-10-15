@@ -19,7 +19,6 @@ public class CrmApplication extends SpringBootServletInitializer {
 		return "Hello World!";
 	}
     public static void main(String[] args) {
-    	System.out.print("sadsadasdasdasdasdasdasdas");
         SpringApplication.run(CrmApplication.class, args);
     }
 

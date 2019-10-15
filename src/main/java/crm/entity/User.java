@@ -6,10 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.*;
+
 
 @Entity(name = "users")
 @Data
@@ -17,8 +21,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+	private static final Logger logger = LoggerFactory.getLogger(User.class);
 
     @Id
+    @Column(name = "id", unique = true, nullable = false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
@@ -40,6 +46,7 @@ public class User {
 
     @ManyToOne
     private Role role;
+    
 
     public int getColumnCount() {
         return getClass().getDeclaredFields().length;
@@ -47,6 +54,18 @@ public class User {
 
     public int getRole_id() {
         return role.getId();
+    }
+    public void setUsername(String username) {
+    	this.username = username;
+    }
+    public void setFirstName(String firstName){
+    	this.firstName = firstName;
+    }
+    public void setLastName(String LastName){
+    	this.lastName = LastName;
+    }
+    public void setEmail(String email) {
+    	this.email = email;
     }
 
     public String getRole_name() {
@@ -77,9 +96,10 @@ public class User {
 		this.role = userRole;
 	}
 
-	public long getId() {
+	public Long getId() {
 		// TODO Auto-generated method stub
-		return this.id;
+		logger.debug("checking user id "+id);
+		return id;
 	}
 
 	public void setEnabled(int i) {

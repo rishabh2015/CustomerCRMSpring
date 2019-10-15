@@ -3,6 +3,10 @@ package crm;
 import crm.viewResolver.CsvViewResolver;
 import crm.viewResolver.ExcelViewResolver;
 import crm.viewResolver.PdfViewResolver;
+
+import org.slf4j.Logger;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.support.ErrorPageFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
@@ -23,6 +27,8 @@ import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
+import org.slf4j.LoggerFactory;
+
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,10 +37,25 @@ import java.util.Map;
 
 @Configuration
 public class WebAppConfig extends WebMvcConfigurerAdapter {
+	
+	private static final Logger logger = LoggerFactory.getLogger(WebAppConfig.class);
 
+	@Bean
+	public ErrorPageFilter errorPageFilter() {
+	    return new ErrorPageFilter();
+	}
+
+	@Bean
+	public FilterRegistrationBean disableSpringBootErrorFilter(ErrorPageFilter filter) {
+	    FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+	    filterRegistrationBean.setFilter(filter);
+	    filterRegistrationBean.setEnabled(false);
+	    return filterRegistrationBean;
+	}
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/register").setViewName("register");
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/user/menu").setViewName("user/user-menu");
         registry.addViewController("/customer/menu").setViewName("customer/customer-menu");
@@ -53,7 +74,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
                 .ignoreAcceptHeader(false)
                 .defaultContentType(MediaType.APPLICATION_JSON)
                 .useJaf(false);
-
+        logger.debug("inside content negotiation");
         final Map<String,MediaType> mediaTypes = new HashMap<>();
         mediaTypes.put("html", MediaType.TEXT_HTML);
         mediaTypes.put("json", MediaType.APPLICATION_JSON);
@@ -104,7 +125,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
 
         SpringTemplateEngine templateEngine = new SpringTemplateEngine();
         templateEngine.setTemplateResolver(templateResolver());
-
+        logger.debug("checking here the spring dialect and code is running here");
         // add dialect spring security
         templateEngine.addDialect(new SpringSecurityDialect());
         return templateEngine;

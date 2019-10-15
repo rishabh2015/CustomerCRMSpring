@@ -2,7 +2,11 @@
 <configuration>
 
     <property name="HOME_LOG" value="logs/app.log"/>
-
+     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger{36}.%M - %msg%n</pattern>
+        </encoder>
+    </appender>
     <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${HOME_LOG}</file>
 
@@ -22,9 +26,12 @@
         </encoder>
     </appender>
 
-    <logger name="com.mkyong" level="debug" additivity="false">
+    <logger name="crm" level="debug" additivity="false">
         <appender-ref ref="FILE-ROLLING"/>
+         <appender-ref ref="STDOUT" />
     </logger>
+
+    
 
     <root level="error">
         <appender-ref ref="FILE-ROLLING"/>

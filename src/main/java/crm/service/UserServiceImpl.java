@@ -4,6 +4,9 @@ import crm.entity.Role;
 import crm.entity.User;
 import crm.repository.RoleRepository;
 import crm.repository.UserRepository;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
     private SpringDataUserDetailsService springDataUserDetailsService;
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
@@ -69,6 +73,7 @@ public class UserServiceImpl implements UserService {
         String password = user.getPassword();
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
+        logger.debug("this function is fired //testing");
         if (user.getId()==1L) {
             userRole = roleRepository.findByName("ROLE_ADMIN");
             user.setRole(userRole);

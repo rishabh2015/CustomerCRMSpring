@@ -66,13 +66,6 @@ public class Customer {
     this.enabled = enabled2;
 	}
 
-	
-
-	public Customer() {
-		// TODO Auto-generated constructor stub
-	}
-
-
 
 	public void setEnabled(int i) {
 		// TODO Auto-generated method stub
